@@ -1,0 +1,92 @@
+env_name: Xleftright-evolvediscretelong-v1
+env_name_eval: Xleftright-evolvediscretelong-v1
+env_params_eval: {}
+
+
+method: gt_hip
+
+online:
+  buffer_size: 1000000
+  
+  num_train_envs: 32
+  max_grad_norm: 1.0
+  gamma: 0.99
+  critic_network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 128
+  actor_network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 128
+  lr: 0.001
+  num_train_steps: 100000
+  
+  update_freq: 8
+  policy_freq: 2
+
+  polyak: 0.995  # target network polyak
+  batch_size: 256  # batch size per update
+  warmup_steps:  50  # times number of envs
+  exploration_std: 0.1
+  exploration_clip: 0.1
+  policy_noise_std: 0.1  # noise during update
+  policy_noise_clip: 0.1  # noise during update
+
+  input_gt_hip: false
+  record_hip_as_state: false
+
+
+  n_updates_jit: 8
+  num_test_rollouts: 164
+  evaluate_every_epochs: 100
+  
+  n_deployments_record: 10000
+  traj_recording_parallel: 100
+
+vae:
+  batch_size: 1024  # if using recurrent vae, this is the number of deployments sampled
+  train_steps: 50000
+  
+  latent_dim: 8
+  lr: 0.0003
+  
+  decoder_hidden_layers: 2
+  encoder_hidden_layers: 2
+  num_hidden_units: 128
+  latent_in_second_layer: true
+  use_reward_loss: true
+  use_state_loss: false
+  two_transition_vae: true
+
+  context_len_cpc: 3
+  cpc_offset: 1
+  cpc_trans_encoding_dim: 32
+  use_trans_encoding: true
+
+  vae_beta: 0.05
+
+  n_updates_jit: 1  # jitting multiple updates together actually decreases performance with vrnn, for some reason
+  
+  evaluate_every_steps: 10000
+
+offline:
+  train_steps: 100000
+  
+  buffer_size: 1000000
+  batch_size: 512
+  gamma: 0.99
+  critic_lr: 3e-4
+  actor_lr: 3e-4
+  
+  network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 256
+    use_layer_norm: True
+
+  policy_freq: 2
+  polyak: 0.995
+  td3_alpha: 2.5
+  
+  n_updates_jit: 4
+
+  evaluate_every_epochs: 500
+  num_test_rollouts: 1000

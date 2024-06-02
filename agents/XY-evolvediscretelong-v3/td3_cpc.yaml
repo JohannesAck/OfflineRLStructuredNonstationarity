@@ -1,0 +1,96 @@
+env_name: XY-evolvediscretelong-v3
+env_name_eval: XY-evolvediscretelong-v3
+# seed: 123
+
+method: cpc
+
+load_repr: false
+
+online:
+  buffer_size: 1000000
+  
+  num_train_envs: 32
+  max_grad_norm: 1.0
+  gamma: 0.99
+  critic_network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 128
+  actor_network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 128
+  lr: 0.001
+  num_train_steps: 100000
+  
+  update_freq: 8
+  policy_freq: 2
+
+  polyak: 0.995  # target network polyak
+  batch_size: 256  # batch size per update
+  warmup_steps:  50  # times number of envs
+  exploration_std: 0.1
+  exploration_clip: 0.1
+  policy_noise_std: 0.1  # noise during update
+  policy_noise_clip: 0.1  # noise during update
+
+  
+  n_updates_jit: 8
+  num_test_rollouts: 164
+  evaluate_every_epochs: 100
+  
+  n_deployments_record: 10000
+  traj_recording_parallel: 100
+
+vae:
+  batch_size: 1024  # if using recurrent vae, this is the number of deployments sampled
+  train_steps: 100000
+  
+  lr: 0.0003
+  
+  decoder_hidden_layers: 2
+  encoder_hidden_layers: 2
+  num_hidden_units: 128
+  latent_in_second_layer: true
+  use_reward_loss: true
+  use_state_loss: false
+  two_transition_vae: true
+
+  context_len_cpc: 3
+  cpc_offset: 1
+  cpc_trans_encoding_dim: 4
+  cpc_context_encoding_dim: 16
+  use_trans_encoding: true
+
+  
+  vae_beta: 0.05
+
+  n_updates_jit: 1  # jitting multiple updates together actually decreases performance with vrnn, for some reason
+  
+  evaluate_every_steps: 5000 #50000
+
+offline:
+  train_steps: 10000
+  
+  buffer_size: 1000000
+  batch_size: 512
+  gamma: 0.99
+  critic_lr: 1e-3
+  actor_lr: 1e-3
+  max_grad_norm: 1.0
+  
+  network_config:
+    num_hidden_layers: 2
+    num_hidden_units: 256
+
+  policy_freq: 1
+  polyak: 0.995
+  td3_alpha: 6.5
+
+  policy_freq: 2
+  
+  train_with_predictor_output: false
+  eval_mode: predicted_latent
+
+  n_updates_jit: 4
+
+  evaluate_every_epochs: 250
+  num_test_rollouts: 1000

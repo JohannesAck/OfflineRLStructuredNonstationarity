@@ -1,0 +1,27 @@
+gymnax
+optax
+# dotmap
+tqdm
+numpy
+matplotlib
+pyyaml
+tensorflow-probability
+-f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+jax[cuda12_pip]
+wandb
+pyrallis
+scikit-learn
+matplotlib
+# for tikzplotlib
+# matplotlib==3.6.2
+# tikzplotlib
+# seaborn
+autopep8
+moviepy
+brax
+pytest-xdist
+d4rl
+cython<3   # necessary for mujoco
+-e git+https://github.com/aravindr93/mjrl@master#egg=mjrl
+distrax
+einops

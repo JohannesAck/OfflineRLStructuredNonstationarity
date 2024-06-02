@@ -1,0 +1,3 @@
+from .RepresentationTrainer import RepresentationTrainer
+from .cpc_model import CPCTrainer
+from .latent_predictor_model import PredictorTrainer
